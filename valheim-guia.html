@@ -1,0 +1,2370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saga dos Quatro — Guia de Valheim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink-void: #0a0806;
+  --ink-deep: #13100c;
+  --ink-mid: #1c1813;
+  --ink-raised: #2a231b;
+  --parchment: #e8dcc4;
+  --parchment-dim: #b8ac94;
+  --ember: #c8892f;
+  --ember-bright: #e8a84a;
+  --ember-dim: #7a5620;
+  --blood: #8b2e1f;
+  --rune: #6b8e5a;
+  --frost: #7ba3c4;
+  --mist: #8a7a9c;
+  --ash: #d4634a;
+  --border-faint: rgba(200, 137, 47, 0.18);
+  --border-mid: rgba(200, 137, 47, 0.38);
+  --border-strong: rgba(232, 168, 74, 0.65);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink-void);
+  color: var(--parchment);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.65;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* Atmospheric background */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(200, 137, 47, 0.08), transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(139, 46, 31, 0.05), transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(10, 8, 6, 0), rgba(10, 8, 6, 0.8) 90%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.container { position: relative; z-index: 2; }
+
+/* ============ HEADER ============ */
+header.hero {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  position: relative;
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.hero-runes {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1.5rem;
+  font-size: 1.4rem;
+  color: var(--ember-dim);
+  letter-spacing: 0.3em;
+  opacity: 0.6;
+}
+
+.hero-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.55em;
+  color: var(--ember);
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fade-in 1.2s 0.2s forwards;
+}
+
+h1.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 900;
+  line-height: 0.95;
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  color: var(--parchment);
+  text-shadow: 0 2px 30px rgba(200, 137, 47, 0.2);
+  opacity: 0;
+  animation: fade-in 1.4s 0.4s forwards;
+}
+
+h1.hero-title .accent {
+  display: block;
+  color: var(--ember-bright);
+  font-style: italic;
+  font-weight: 400;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.6em;
+  margin-top: 0.3em;
+  letter-spacing: 0.02em;
+}
+
+.hero-sub {
+  max-width: 640px;
+  text-align: center;
+  font-size: 1.15rem;
+  color: var(--parchment-dim);
+  font-style: italic;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fade-in 1.4s 0.8s forwards;
+}
+
+.hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--ember);
+  margin: 2rem 0;
+  opacity: 0;
+  animation: fade-in 1.4s 1s forwards;
+}
+
+.hero-divider::before, .hero-divider::after {
+  content: '';
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ember), transparent);
+}
+
+.hero-divider span {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.4em;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.hero-party {
+  display: flex;
+  gap: 3rem;
+  margin-top: 1rem;
+  opacity: 0;
+  animation: fade-in 1.4s 1.2s forwards;
+}
+
+.party-member {
+  text-align: center;
+  color: var(--parchment-dim);
+}
+
+.party-member-icon {
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--border-mid);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+  font-size: 1.5rem;
+  color: var(--ember);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.party-member:hover .party-member-icon {
+  border-color: var(--ember);
+  box-shadow: 0 0 20px rgba(200, 137, 47, 0.3);
+  transform: translateY(-3px);
+}
+
+.party-member-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+/* ============ NAVIGATION ============ */
+nav.modules {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10, 8, 6, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-faint);
+  padding: 1rem 2rem;
+}
+
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  justify-content: center;
+  scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--parchment-dim);
+  padding: 0.55rem 1.1rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  border-radius: 2px;
+}
+
+.nav-btn:hover {
+  color: var(--ember-bright);
+  border-color: var(--border-faint);
+}
+
+.nav-btn.active {
+  color: var(--ember-bright);
+  border-color: var(--border-mid);
+  background: rgba(200, 137, 47, 0.08);
+}
+
+/* ============ MODULES ============ */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+}
+
+.module {
+  display: none;
+  animation: module-enter 0.6s ease-out;
+}
+
+.module.active { display: block; }
+
+@keyframes module-enter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Module header */
+.module-header {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-faint);
+  position: relative;
+}
+
+.module-number {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.5em;
+  color: var(--ember);
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.module h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--parchment);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.8rem;
+}
+
+.module h2 em {
+  color: var(--ember-bright);
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+}
+
+.module-intro {
+  font-size: 1.2rem;
+  color: var(--parchment-dim);
+  max-width: 780px;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* ============ MODULE 1: Visão Geral ============ */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: linear-gradient(145deg, var(--ink-mid), var(--ink-deep));
+  border: 1px solid var(--border-faint);
+  padding: 2rem 1.8rem;
+  position: relative;
+  transition: all 0.4s;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(180deg, var(--ember), transparent);
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.stat-card:hover {
+  border-color: var(--border-mid);
+  transform: translateY(-4px);
+}
+.stat-card:hover::before { opacity: 1; }
+
+.stat-card .stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.stat-card .stat-value {
+  font-family: 'Cinzel', serif;
+  font-size: 2.8rem;
+  color: var(--parchment);
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-desc {
+  color: var(--parchment-dim);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.principle {
+  padding: 2rem;
+  background: linear-gradient(180deg, rgba(28, 24, 19, 0.5), rgba(19, 16, 12, 0.5));
+  border-left: 2px solid var(--ember);
+  position: relative;
+}
+
+.principle-num {
+  font-family: 'Cinzel', serif;
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--ember-dim);
+  opacity: 0.5;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.principle h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  color: var(--ember-bright);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+.principle p { color: var(--parchment-dim); line-height: 1.7; }
+
+/* ============ MODULE 2: Biomas ============ */
+.biome-timeline {
+  margin-top: 2rem;
+}
+
+.biome-progress {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background: rgba(10, 8, 6, 0.6);
+  border: 1px solid var(--border-faint);
+}
+
+.progress-step {
+  flex: 1;
+  cursor: pointer;
+  text-align: center;
+  padding: 0.8rem 0.4rem;
+  border-top: 3px solid var(--ink-raised);
+  transition: all 0.3s;
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+  background: none;
+  border-left: none; border-right: none; border-bottom: none;
+}
+
+.progress-step.active {
+  border-top-color: var(--ember-bright);
+  color: var(--ember-bright);
+  background: rgba(200, 137, 47, 0.08);
+}
+
+.progress-step:hover {
+  color: var(--parchment);
+  border-top-color: var(--ember-dim);
+}
+
+.biome-card {
+  display: none;
+  background: linear-gradient(180deg, var(--ink-mid), var(--ink-deep));
+  border: 1px solid var(--border-mid);
+  padding: 3rem;
+  animation: module-enter 0.4s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.biome-card.active { display: block; }
+
+.biome-card::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, var(--biome-color), transparent 70%);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.biome-card[data-biome="meadows"] { --biome-color: #7fa850; }
+.biome-card[data-biome="blackforest"] { --biome-color: #3d5438; }
+.biome-card[data-biome="swamp"] { --biome-color: #6b5d3d; }
+.biome-card[data-biome="mountains"] { --biome-color: #a8c4d8; }
+.biome-card[data-biome="plains"] { --biome-color: #c9a855; }
+.biome-card[data-biome="mistlands"] { --biome-color: #8a7a9c; }
+.biome-card[data-biome="ashlands"] { --biome-color: #d4634a; }
+.biome-card[data-biome="deepnorth"] { --biome-color: #b8d0e0; }
+
+.biome-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.biome-title-block h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  color: var(--parchment);
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+.biome-tagline {
+  font-style: italic;
+  color: var(--parchment-dim);
+  font-size: 1.05rem;
+}
+
+.biome-time {
+  text-align: right;
+}
+
+.biome-time-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.biome-time-value {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  color: var(--ember-bright);
+  font-weight: 700;
+}
+
+.biome-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.biome-section {
+  position: relative;
+}
+
+.biome-section h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.biome-section ul {
+  list-style: none;
+}
+
+.biome-section li {
+  padding: 0.5rem 0 0.5rem 1.2rem;
+  position: relative;
+  color: var(--parchment-dim);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.biome-section li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--ember);
+  font-size: 0.6rem;
+  top: 0.85rem;
+}
+
+.biome-section li strong {
+  color: var(--parchment);
+  font-weight: 600;
+}
+
+.biome-threat {
+  background: rgba(139, 46, 31, 0.1);
+  border: 1px solid rgba(139, 46, 31, 0.3);
+  padding: 1.2rem 1.5rem;
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.biome-threat-icon {
+  font-size: 1.4rem;
+  color: var(--blood);
+  flex-shrink: 0;
+}
+
+.biome-threat-text {
+  color: var(--parchment-dim);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.biome-threat-text strong {
+  color: var(--ash);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+/* ============ MODULE 3: Papéis ============ */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.role-card {
+  background: linear-gradient(180deg, var(--ink-mid), var(--ink-deep));
+  border: 1px solid var(--border-faint);
+  padding: 2.5rem;
+  position: relative;
+  transition: all 0.4s;
+  overflow: hidden;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, var(--role-accent), transparent 70%);
+  opacity: 0.1;
+  transition: opacity 0.4s;
+}
+
+.role-card:hover {
+  border-color: var(--border-mid);
+  transform: translateY(-6px);
+}
+
+.role-card:hover::before { opacity: 0.25; }
+
+.role-card[data-role="builder"] { --role-accent: #c8892f; }
+.role-card[data-role="farmer"] { --role-accent: #7fa850; }
+.role-card[data-role="miner"] { --role-accent: #a8c4d8; }
+.role-card[data-role="scout"] { --role-accent: #d4634a; }
+
+.role-icon {
+  font-size: 2rem;
+  color: var(--role-accent);
+  margin-bottom: 1rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+}
+
+.role-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: var(--parchment);
+  margin-bottom: 0.3rem;
+}
+
+.role-subtitle {
+  font-style: italic;
+  color: var(--role-accent);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.role-block {
+  margin-bottom: 1.5rem;
+}
+
+.role-block-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.role-block-content {
+  color: var(--parchment-dim);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.role-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.skill-pill {
+  background: rgba(200, 137, 47, 0.1);
+  border: 1px solid var(--border-faint);
+  padding: 0.3rem 0.8rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--parchment);
+}
+
+.rotation-note {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: rgba(107, 142, 90, 0.08);
+  border-left: 3px solid var(--rune);
+}
+
+.rotation-note h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: var(--rune);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.rotation-note p {
+  color: var(--parchment-dim);
+  line-height: 1.7;
+}
+
+/* ============ MODULE 4: Cooperação ============ */
+.coop-section {
+  margin-bottom: 3rem;
+}
+
+.coop-section h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  color: var(--ember-bright);
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.coop-section p {
+  color: var(--parchment-dim);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+  font-size: 1.08rem;
+}
+
+.coop-section p strong {
+  color: var(--parchment);
+  font-weight: 600;
+}
+
+.scaling-chart {
+  background: var(--ink-deep);
+  border: 1px solid var(--border-faint);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.scaling-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 100px;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.scaling-row:last-child { border-bottom: none; }
+
+.scaling-label {
+  font-family: 'Cinzel', serif;
+  color: var(--ember);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+}
+
+.scaling-bar-track {
+  height: 20px;
+  background: rgba(200, 137, 47, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.scaling-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ember-dim), var(--ember-bright));
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 1.2s ease-out;
+  width: 0;
+}
+
+.scaling-value {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--parchment);
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.portal-tag {
+  padding: 0.8rem;
+  background: rgba(28, 24, 19, 0.6);
+  border: 1px solid var(--border-faint);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--parchment-dim);
+  transition: all 0.3s;
+}
+
+.portal-tag:hover {
+  border-color: var(--border-mid);
+  color: var(--ember-bright);
+  background: rgba(200, 137, 47, 0.08);
+}
+
+.portal-tag-name {
+  display: block;
+  color: var(--ember);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+/* ============ MODULE 5: Dicas ============ */
+.tips-list {
+  counter-reset: tip-counter;
+}
+
+.tip-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--border-faint);
+  counter-increment: tip-counter;
+  align-items: start;
+}
+
+.tip-item:last-child { border-bottom: none; }
+
+.tip-number {
+  font-family: 'Cinzel', serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--ember-dim);
+  opacity: 0.6;
+}
+
+.tip-number::before {
+  content: '0' counter(tip-counter);
+}
+
+.tip-content h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  color: var(--parchment);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.01em;
+}
+
+.tip-content p {
+  color: var(--parchment-dim);
+  line-height: 1.75;
+  font-size: 1.06rem;
+}
+
+.tip-content p strong {
+  color: var(--ember-bright);
+  font-weight: 600;
+}
+
+.tip-content code {
+  background: rgba(200, 137, 47, 0.1);
+  color: var(--ember-bright);
+  padding: 0.1rem 0.4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  border-radius: 2px;
+}
+
+/* ============ FOOTER ============ */
+footer {
+  border-top: 1px solid var(--border-faint);
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  color: var(--parchment-dim);
+}
+
+.footer-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: var(--parchment);
+  line-height: 1.5;
+}
+
+.footer-runes {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  color: var(--ember);
+  font-size: 1.2rem;
+  letter-spacing: 0.3em;
+  opacity: 0.6;
+}
+
+/* ============ RESOURCE POPOVER ============ */
+.resource {
+  cursor: pointer;
+  border-bottom: 1px dashed var(--border-mid);
+  transition: all 0.2s;
+  color: var(--parchment) !important;
+  font-weight: 600;
+  position: relative;
+}
+
+.resource::after {
+  content: '⌕';
+  font-size: 0.75em;
+  color: var(--ember);
+  margin-left: 0.2em;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.resource:hover {
+  color: var(--ember-bright) !important;
+  border-bottom-color: var(--ember);
+}
+
+.resource:hover::after {
+  opacity: 1;
+}
+
+.resource.active {
+  color: var(--ember-bright) !important;
+  background: rgba(200, 137, 47, 0.12);
+  padding: 0.1em 0.3em;
+  border-bottom-color: var(--ember-bright);
+}
+
+#popover {
+  position: fixed;
+  z-index: 100;
+  width: 340px;
+  max-width: calc(100vw - 2rem);
+  background: linear-gradient(180deg, var(--ink-raised), var(--ink-mid));
+  border: 1px solid var(--border-strong);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(200, 137, 47, 0.15),
+    inset 0 1px 0 rgba(232, 168, 74, 0.12);
+  padding: 0;
+  opacity: 0;
+  transform: translateY(8px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#popover.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+#popover::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(180deg, var(--ember-bright), transparent);
+}
+
+.pop-head {
+  padding: 1.3rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--border-faint);
+  position: relative;
+}
+
+.pop-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--parchment-dim);
+  font-size: 1.4rem;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.pop-close:hover { color: var(--ember-bright); }
+
+.pop-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.35em;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.pop-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem;
+  color: var(--parchment);
+  font-weight: 700;
+  line-height: 1.2;
+  padding-right: 2rem;
+}
+
+.pop-body {
+  padding: 1rem 1.5rem 1.4rem;
+}
+
+.pop-section {
+  margin-bottom: 0.9rem;
+}
+
+.pop-section:last-child { margin-bottom: 0; }
+
+.pop-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--ember);
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pop-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-faint);
+}
+
+.pop-text {
+  color: var(--parchment-dim);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.pop-text strong {
+  color: var(--parchment);
+  font-weight: 600;
+}
+
+.pop-biome-tag {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  padding: 0.2rem 0.55rem;
+  background: rgba(200, 137, 47, 0.12);
+  border: 1px solid var(--border-mid);
+  color: var(--ember-bright);
+  text-transform: uppercase;
+  margin-right: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.pop-tip {
+  background: rgba(107, 142, 90, 0.08);
+  border-left: 2px solid var(--rune);
+  padding: 0.7rem 0.9rem;
+  color: var(--parchment-dim);
+  font-size: 0.88rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.pop-tip strong {
+  color: var(--rune);
+  font-style: normal;
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  body { font-size: 16px; }
+  header.hero { min-height: 70vh; padding: 3rem 1.5rem; }
+  .hero-party { gap: 1.5rem; }
+  main { padding: 2rem 1rem 4rem; }
+  .module h2 { font-size: 2rem; }
+  .biome-card { padding: 1.8rem; }
+  .biome-head { flex-direction: column; }
+  .biome-time { text-align: left; }
+  .tip-item { grid-template-columns: 1fr; gap: 0.8rem; }
+  .tip-number { font-size: 2.2rem; }
+  .progress-step { font-size: 0.55rem; padding: 0.6rem 0.2rem; }
+  .scaling-row { grid-template-columns: 60px 1fr 70px; font-size: 0.8rem; }
+  #popover { width: calc(100vw - 2rem); }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- =========== HERO =========== -->
+<header class="hero">
+  <div class="hero-runes">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ</div>
+  <div class="hero-eyebrow">Guia de Progressão — Edição 2026</div>
+  <h1 class="hero-title">
+    Saga dos Quatro
+    <span class="accent">a jornada ao Valhalla</span>
+  </h1>
+  <p class="hero-sub">
+    Um roteiro de preparação, especialização e cooperação para quatro vikings recém-chegados à décima terra. Sem spoilers de chefes — apenas o que é preciso saber para sobreviver a cada bioma que os espera.
+  </p>
+
+  <div class="hero-divider">
+    <span>Quatro Guerreiros</span>
+  </div>
+
+  <div class="hero-party">
+    <div class="party-member">
+      <div class="party-member-icon">⚒</div>
+      <div class="party-member-label">Construtor</div>
+    </div>
+    <div class="party-member">
+      <div class="party-member-icon">❦</div>
+      <div class="party-member-label">Granjeiro</div>
+    </div>
+    <div class="party-member">
+      <div class="party-member-icon">⛏</div>
+      <div class="party-member-label">Minerador</div>
+    </div>
+    <div class="party-member">
+      <div class="party-member-icon">➳</div>
+      <div class="party-member-label">Batedor</div>
+    </div>
+  </div>
+</header>
+
+<!-- =========== NAVIGATION =========== -->
+<nav class="modules">
+  <div class="nav-inner">
+    <button class="nav-btn active" data-module="visao">I · Visão Geral</button>
+    <button class="nav-btn" data-module="biomas">II · Os Sete Biomas</button>
+    <button class="nav-btn" data-module="papeis">III · Papéis do Grupo</button>
+    <button class="nav-btn" data-module="coop">IV · Cooperação</button>
+    <button class="nav-btn" data-module="dicas">V · Verdades Essenciais</button>
+  </div>
+</nav>
+
+<!-- =========== MAIN =========== -->
+<main>
+
+<!-- MODULE 1: VISÃO GERAL -->
+<section class="module active" id="visao">
+  <div class="module-header">
+    <div class="module-number">Módulo I</div>
+    <h2>O <em>estado</em> do jogo em 2026</h2>
+    <p class="module-intro">Valheim continua em Early Access (patch 0.221.12), mas com sete biomas plenamente jogáveis e centenas de horas de conteúdo. O grupo de vocês encara um jogo estável, profundo e ainda em evolução.</p>
+  </div>
+
+  <div class="overview-grid">
+    <div class="stat-card">
+      <div class="stat-label">Biomas Jogáveis</div>
+      <div class="stat-value">7</div>
+      <div class="stat-desc">Meadows, Black Forest, Swamp, Mountains, Plains, Mistlands e Ashlands (endgame atual).</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Duração Estimada</div>
+      <div class="stat-value">~140h</div>
+      <div class="stat-desc">Para completar todo conteúdo atual jogando em grupo coordenado de quatro.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Escala de HP</div>
+      <div class="stat-value">+90%</div>
+      <div class="stat-desc">Chefes e inimigos ficam mais tankudos para grupo de 4, mas drops também escalam.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Deep North</div>
+      <div class="stat-value">2026</div>
+      <div class="stat-desc">O último bioma ainda não está jogável — lançará junto com o 1.0 oficial.</div>
+    </div>
+  </div>
+
+  <div class="principles">
+    <div class="principle">
+      <div class="principle-num">I</div>
+      <h3>Preparação &gt; Reflexos</h3>
+      <p>Valheim não é um jogo de 200 APM. Todo chefe cai se vocês tiverem o tier certo de armadura, comida cozida e mead de resistência. Quem farma 40 minutos antes vence na primeira tentativa.</p>
+    </div>
+    <div class="principle">
+      <div class="principle-num">II</div>
+      <h3>Especializar é mecânica</h3>
+      <p>Skills sobem por uso individual. Quem cozinha fica mecanicamente melhor em cozinhar; quem minera se cansa menos minerando. Quatro especialistas rodando papéis derrubam quatro generalistas sempre.</p>
+    </div>
+    <div class="principle">
+      <div class="principle-num">III</div>
+      <h3>Infraestrutura supera combate</h3>
+      <p>A decisão que mais acelera a campanha não é qual arma usar — é onde montar outposts, como organizar a rede de portais e quem administra o hub central. Duas horas planejando poupam vinte de travel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 2: BIOMAS -->
+<section class="module" id="biomas">
+  <div class="module-header">
+    <div class="module-number">Módulo II</div>
+    <h2>Os <em>sete</em> biomas e como se preparar</h2>
+    <p class="module-intro">Cada bioma é um checkpoint com seu próprio chefe, suas ameaças ambientais e seu tier de equipamento. Aqui está o que preparar antes de pisar em cada um — sem spoilers sobre os bosses.</p>
+  </div>
+
+  <div class="biome-progress" id="biomeProgress">
+    <button class="progress-step active" data-biome="meadows">I · Meadows</button>
+    <button class="progress-step" data-biome="blackforest">II · Black Forest</button>
+    <button class="progress-step" data-biome="swamp">III · Swamp</button>
+    <button class="progress-step" data-biome="mountains">IV · Mountains</button>
+    <button class="progress-step" data-biome="plains">V · Plains</button>
+    <button class="progress-step" data-biome="mistlands">VI · Mistlands</button>
+    <button class="progress-step" data-biome="ashlands">VII · Ashlands</button>
+  </div>
+
+  <!-- MEADOWS -->
+  <div class="biome-card active" data-biome="meadows">
+    <div class="biome-head">
+      <div class="biome-title-block">
+        <h3>Meadows</h3>
+        <div class="biome-tagline">O tutorial sem sustos — onde vocês aprendem a viver</div>
+      </div>
+      <div class="biome-time">
+        <div class="biome-time-label">Tempo Estimado</div>
+        <div class="biome-time-value">3–6h</div>
+      </div>
+    </div>
+    <div class="biome-sections">
+      <div class="biome-section">
+        <h4>Equipamento Mínimo</h4>
+        <ul>
+          <li><strong>Stone Axe</strong> + <strong>Club</strong></li>
+          <li><strong>Crude Bow</strong> com flechas de madeira</li>
+          <li><strong>Wood Shield</strong></li>
+          <li>Leather Armor completa nível 2</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Recursos a Estocar</h4>
+        <ul>
+          <li>~150 de <span class="resource" data-resource="wood">madeira</span> e ~50 <span class="resource" data-resource="stone">pedra</span></li>
+          <li>20–30 <span class="resource" data-resource="leather-scraps">Leather Scraps</span></li>
+          <li>20+ <span class="resource" data-resource="feathers">Feathers</span> e <span class="resource" data-resource="raspberries">raspberries</span></li>
+          <li><strong><span class="resource" data-resource="honey">Mel</span> de colmeias selvagens</strong> (insumo de todas as meads)</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Comida &amp; Base</h4>
+        <ul>
+          <li>Cooked Boar Meat, Cooked Deer Meat, Grilled Neck Tail</li>
+          <li>Shelter 4×4 com fogueira, cama e teto</li>
+          <li>Garantir sempre o <strong>Rested buff</strong></li>
+          <li>Não se preocupem com defesa ainda</li>
+        </ul>
+      </div>
+    </div>
+    <div class="biome-threat">
+      <div class="biome-threat-icon">⚠</div>
+      <div class="biome-threat-text">
+        <strong>Ameaça Ambiental</strong>
+        Praticamente nenhuma. Greylings, javalis, veados e Necks são inimigos leves. Aproveitem para aprender o combate sem pressão — é a única vez que o jogo será gentil.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLACK FOREST -->
+  <div class="biome-card" data-biome="blackforest">
+    <div class="biome-head">
+      <div class="biome-title-block">
+        <h3>Black Forest</h3>
+        <div class="biome-tagline">O verdadeiro início — onde começa a progressão metálica</div>
+      </div>
+      <div class="biome-time">
+        <div class="biome-time-label">Tempo Estimado</div>
+        <div class="biome-time-value">8–15h</div>
+      </div>
+    </div>
+    <div class="biome-sections">
+      <div class="biome-section">
+        <h4>Equipamento Mínimo</h4>
+        <ul>
+          <li><strong>Flint Knife / Spear</strong></li>
+          <li>Crude Bow nível 2–3</li>
+          <li>Leather Set upgrade nível 2</li>
+          <li>Wood Shield nível 2</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Recursos a Estocar</h4>
+        <ul>
+          <li><strong>100–150 <span class="resource" data-resource="copper">Copper</span> + 50–80 <span class="resource" data-resource="tin">Tin</span></strong> (50 <span class="resource" data-resource="bronze">Bronze bars</span>)</li>
+          <li>10–15 <span class="resource" data-resource="troll-hide">Troll Hide</span>, 30 <span class="resource" data-resource="ancient-bark">Ancient Bark</span></li>
+          <li>15–20 <span class="resource" data-resource="thistle">Thistle</span> (para a Swamp)</li>
+          <li><span class="resource" data-resource="surtling-cores">Surtling Cores</span> de Burial Chambers</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Comida &amp; Base</h4>
+        <ul>
+          <li><strong>Carrot Soup, Deer Stew, Minced Meat Sauce</strong></li>
+          <li>Começar Poison Resistance Mead no Fermenter</li>
+          <li>Forge + Smelter + Charcoal Kiln + Cauldron</li>
+          <li>Iniciar hub de portais; <strong>Comfort alvo: 8–9</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="biome-threat">
+      <div class="biome-threat-icon">⚠</div>
+      <div class="biome-threat-text">
+        <strong>Ameaças Principais</strong>
+        Trolls são o maior perigo inicial — matem-os de longe com arco, fazendo kiting em árvores. Greydwarves e raids começam após o primeiro chefe; construam earthwork com hoe + palisade de madeira atrás (terreno natural não é destrutível).
+      </div>
+    </div>
+  </div>
+
+  <!-- SWAMP -->
+  <div class="biome-card" data-biome="swamp">
+    <div class="biome-head">
+      <div class="biome-title-block">
+        <h3>Swamp</h3>
+        <div class="biome-tagline">O bioma mais punitivo do early game — preparação rigorosa ou wipe certo</div>
+      </div>
+      <div class="biome-time">
+        <div class="biome-time-label">Tempo Estimado</div>
+        <div class="biome-time-value">12–20h</div>
+      </div>
+    </div>
+    <div class="biome-sections">
+      <div class="biome-section">
+        <h4>Equipamento Mínimo</h4>
+        <ul>
+          <li><strong>Bronze Mace</strong> (blunt vs skeletons/blobs)</li>
+          <li><strong>Stagbreaker</strong> para AoE contra Draugr</li>
+          <li>Finewood Bow com <strong>Fire Arrows</strong></li>
+          <li>Bronze Helmet + Troll Hide Tunic/Pants (híbrido)</li>
+          <li>Bronze Buckler nível 3 para parry</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Recursos a Estocar</h4>
+        <ul>
+          <li><strong>100–200 <span class="resource" data-resource="scrap-iron">Scrap Iron</span></strong> dos Sunken Crypts</li>
+          <li>50–100 <span class="resource" data-resource="ancient-bark">Ancient Bark</span>, 20–30 <span class="resource" data-resource="guck">Guck</span></li>
+          <li>3–5 <span class="resource" data-resource="chain">Chain</span> (drop de Wraiths)</li>
+          <li>Seeds de <span class="resource" data-resource="turnip">Turnip</span></li>
+          <li>Construir <strong>Longship</strong> antes de sair</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Comida &amp; Base</h4>
+        <ul>
+          <li><strong>Sausages, Turnip Stew, Queen's Jam</strong></li>
+          <li>Medium Healing Mead substitui o Minor</li>
+          <li>Palafitas com fire pit em cada cluster de Crypts</li>
+          <li><strong>5–10 Poison Resistance Mead por expedição</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="biome-threat">
+      <div class="biome-threat-icon">⚠</div>
+      <div class="biome-threat-text">
+        <strong>Ameaças Ambientais Combinadas</strong>
+        Chuva contínua aplica Wet debuff (−25% stamina regen); à noite soma frio. Leeches na água e Blobs/Oozers dão dano de veneno constante. Poison Resistance Mead é INEGOCIÁVEL — dura 10 minutos por dose.
+      </div>
+    </div>
+  </div>
+
+  <!-- MOUNTAINS -->
+  <div class="biome-card" data-biome="mountains">
+    <div class="biome-head">
+      <div class="biome-title-block">
+        <h3>Mountains</h3>
+        <div class="biome-tagline">Frost damage, verticalidade e lobos famintos</div>
+      </div>
+      <div class="biome-time">
+        <div class="biome-time-label">Tempo Estimado</div>
+        <div class="biome-time-value">10–18h</div>
+      </div>
+    </div>
+    <div class="biome-sections">
+      <div class="biome-section">
+        <h4>Equipamento Mínimo</h4>
+        <ul>
+          <li><strong>Iron Mace, Iron Sword, Iron Battleaxe</strong></li>
+          <li>Huntsman Bow com Frost/Iron Arrows</li>
+          <li>Iron Armor full nível 3</li>
+          <li>Banded Shield nível 3</li>
+          <li>Forge nível 6–7 (Toolrack + Smith's Anvil)</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Recursos a Estocar</h4>
+        <ul>
+          <li><strong>80–120 <span class="resource" data-resource="silver">Silver</span></strong> (requer item específico de detecção)</li>
+          <li>15–20 <span class="resource" data-resource="wolf-pelt">Wolf Pelt</span>, 50+ <span class="resource" data-resource="obsidian">Obsidian</span></li>
+          <li>10–15 <span class="resource" data-resource="freeze-glands">Freeze Glands</span>, 15–20 <span class="resource" data-resource="crystal">Crystal</span></li>
+          <li><strong>1+ <span class="resource" data-resource="dragon-egg">Dragon Egg</span></strong> (obrigatório para o chefe)</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Comida &amp; Base</h4>
+        <ul>
+          <li><strong>Wolf Skewer, Serpent Stew, Eyescream</strong></li>
+          <li>Proteção ao frio: Mead OU Cape OU Wolf Armor</li>
+          <li>Outpost em plateau com paredes e campfires externos</li>
+          <li>Cuidado com quedas — façam rampas com picareta</li>
+        </ul>
+      </div>
+    </div>
+    <div class="biome-threat">
+      <div class="biome-threat-icon">⚠</div>
+      <div class="biome-threat-text">
+        <strong>Frost Damage é Letal</strong>
+        Sem proteção vocês morrem em segundos. Três opções: Frost Mead (10 min temporário), Wolf Fur Cape (permanente, requer lobos) ou Wolf Armor chestpiece (melhor, exige Silver). Levem SEMPRE Frost Mead na primeira incursão.
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAINS -->
+  <div class="biome-card" data-biome="plains">
+    <div class="biome-head">
+      <div class="biome-title-block">
+        <h3>Plains</h3>
+        <div class="biome-tagline">Paisagem aberta, inimigos letais e o bioma mais cruel para o som alto</div>
+      </div>
+      <div class="biome-time">
+        <div class="biome-time-label">Tempo Estimado</div>
+        <div class="biome-time-value">15–25h</div>
+      </div>
+    </div>
+    <div class="biome-sections">
+      <div class="biome-section">
+        <h4>Equipamento Mínimo</h4>
+        <ul>
+          <li><strong>Frostner</strong> (blunt+frost+spirit, icônica)</li>
+          <li>Silver Sword, Crystal Battleaxe</li>
+          <li><strong>Draugr Fang</strong> com Needle ou Obsidian Arrows</li>
+          <li>Wolf Armor nível 3 + Drake Helmet (ou Fenris Set)</li>
+          <li>Silver Shield nível 3</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Recursos a Estocar</h4>
+        <ul>
+          <li><strong>100–200 <span class="resource" data-resource="blackmetal-scrap">Blackmetal Scrap</span></strong> de vilas de Fulings</li>
+          <li>55–80 <span class="resource" data-resource="flax">Flax</span>, 50+ <span class="resource" data-resource="barley">Barley</span> (só crescem aqui!)</li>
+          <li>20+ <span class="resource" data-resource="lox-meat">Lox Meat</span>, 20–30 <span class="resource" data-resource="tar">Tar</span></li>
+          <li>50–80 <span class="resource" data-resource="linen-thread">Linen Thread</span> processado</li>
+          <li>2–3 <span class="resource" data-resource="dragon-tears">Dragon Tears</span></li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Comida &amp; Base</h4>
+        <ul>
+          <li><strong>Lox Meat Pie, Blood Pudding, Fish Wraps</strong></li>
+          <li>Começar Fire Resistance Barley Wine</li>
+          <li>Após chefe: <strong>Artisan Table</strong> destrava fazenda</li>
+          <li>Defesa: double stone walls + earthwork contra raids</li>
+        </ul>
+      </div>
+    </div>
+    <div class="biome-threat">
+      <div class="biome-threat-icon">⚠</div>
+      <div class="biome-threat-text">
+        <strong>Deathsquitos — Som Alto Sempre</strong>
+        Matam em 1–2 hits com som quase inaudível. Escuta treinada salva vidas, volume alto é obrigatório. Fulings são rápidos e atiram projéteis; Lox são tankudos mas lentos — kite com bow funciona bem.
+      </div>
+    </div>
+  </div>
+
+  <!-- MISTLANDS -->
+  <div class="biome-card" data-biome="mistlands">
+    <div class="biome-head">
+      <div class="biome-title-block">
+        <h3>Mistlands</h3>
+        <div class="biome-tagline">Névoa densa, magia e verticalidade extrema</div>
+      </div>
+      <div class="biome-time">
+        <div class="biome-time-label">Tempo Estimado</div>
+        <div class="biome-time-value">20–35h</div>
+      </div>
+    </div>
+    <div class="biome-sections">
+      <div class="biome-section">
+        <h4>Equipamento Mínimo</h4>
+        <ul>
+          <li><strong>Padded Armor nível 3–4</strong> (78 armor max)</li>
+          <li>Blackmetal Sword/Axe/Atgeir</li>
+          <li><strong>Blackmetal Axe obrigatório</strong> (único que corta Yggdrasil)</li>
+          <li>Frostner + Draugr Fang com Needle Arrows</li>
+          <li>Blackmetal Shield nível 3 ou Serpent Scale Shield</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Recursos a Estocar</h4>
+        <ul>
+          <li><strong>40–60 <span class="resource" data-resource="refined-eitr">Refined Eitr</span></strong> (destrava magia)</li>
+          <li>100+ <span class="resource" data-resource="carapace">Carapace</span>, 20+ <span class="resource" data-resource="mandible">Mandible</span></li>
+          <li>15–20 <span class="resource" data-resource="scale-hide">Scale Hide</span>, 50+ <span class="resource" data-resource="yggdrasil-wood">Yggdrasil Wood</span></li>
+          <li>100+ <span class="resource" data-resource="black-marble">Black Marble</span>, 5–10 <span class="resource" data-resource="wisp">Wisp</span>, 5–10 <span class="resource" data-resource="bilebag">Bilebag</span></li>
+          <li>Construir Black Forge e Galdr Table</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Comida &amp; Base</h4>
+        <ul>
+          <li><strong>Seeker Aspic, Yggdrasil Porridge, Mushroom Omelette</strong></li>
+          <li>Melee: Fish 'n Bread + Misthare Supreme + Honey-Glazed Chicken</li>
+          <li>Outpost em plateau alto com Wisplight + ballistas</li>
+          <li><strong>Wisplight sempre equipado</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="biome-threat">
+      <div class="biome-threat-icon">⚠</div>
+      <div class="biome-threat-text">
+        <strong>Névoa Cega e Quedas Matam</strong>
+        Sem Wisplight / Dvergr Lantern vocês andam cegos. Inimigos voadores lançam bombas explosivas, insetos atacam em swarm, Ticks drenam HP. Penhascos são letais — sempre construam com visão 360°.
+      </div>
+    </div>
+  </div>
+
+  <!-- ASHLANDS -->
+  <div class="biome-card" data-biome="ashlands">
+    <div class="biome-head">
+      <div class="biome-title-block">
+        <h3>Ashlands</h3>
+        <div class="biome-tagline">O endgame atual — lava, calor perpétuo e raids constantes</div>
+      </div>
+      <div class="biome-time">
+        <div class="biome-time-label">Tempo Estimado</div>
+        <div class="biome-time-value">25–40h</div>
+      </div>
+    </div>
+    <div class="biome-sections">
+      <div class="biome-section">
+        <h4>Equipamento Mínimo</h4>
+        <ul>
+          <li><strong>Carapace Armor nível 3 full</strong> (ou Eitr-weave para magos)</li>
+          <li>Armas Mistlands top-tier: Krom, Himmin Afl, Demolisher</li>
+          <li>Jotun Bane, Spine Snap</li>
+          <li>Arbalest com Needle arrows</li>
+          <li><strong>Drakkar (barco) obrigatório</strong> para o oceano fervente</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Recursos a Estocar</h4>
+        <ul>
+          <li><strong>80–150 <span class="resource" data-resource="flametal">Flametal Ore</span></strong> de Pylons que afundam</li>
+          <li><span class="resource" data-resource="charred-bones">Charred Bones</span>, <span class="resource" data-resource="grausten">Grausten</span>, <span class="resource" data-resource="asksvin-hide">Asksvin Hide</span></li>
+          <li><span class="resource" data-resource="proustite">Proustite Powder</span></li>
+          <li>Bases <strong>Grausten ou Ashwood tratado</strong> (madeira comum pega fogo)</li>
+        </ul>
+      </div>
+      <div class="biome-section">
+        <h4>Comida &amp; Base</h4>
+        <ul>
+          <li><strong>Roasted Crust Pie, Piquant Pie, Mashed Meat, Fiery Svinstew</strong></li>
+          <li>Magos: Sparkling Shroomshake + Marinated Greens</li>
+          <li><strong>10+ Fire Resistance Barley Wine por expedição</strong></li>
+          <li>Outpost em terreno alto longe da lava + múltiplas ballistas</li>
+        </ul>
+      </div>
+    </div>
+    <div class="biome-threat">
+      <div class="biome-threat-icon">⚠</div>
+      <div class="biome-threat-text">
+        <strong>Tudo Aqui Quer Vocês Mortos</strong>
+        Calor ambiental contínuo, lava letal, raids constantes de undead Charred em grupos grandes, projéteis de fogo, enxames voadores. O oceano ao redor tem Bonemaw Serpents gigantes — combate naval está incluso. Este é o teste final da preparação do grupo.
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- MODULE 3: PAPÉIS -->
+<section class="module" id="papeis">
+  <div class="module-header">
+    <div class="module-number">Módulo III</div>
+    <h2>Os <em>quatro</em> papéis do grupo</h2>
+    <p class="module-intro">Valheim tem 15 skills individuais que sobem pelo uso, e morte remove 5% de cada uma. Distribuir skills entre vocês acelera a progressão real — um especialista com skill 70 iguala o DPS de um tier de arma superior.</p>
+  </div>
+
+  <div class="roles-grid">
+    <div class="role-card" data-role="builder">
+      <div class="role-icon">⚒</div>
+      <h3>Construtor</h3>
+      <div class="role-subtitle">O arquiteto do Valhalla</div>
+      <div class="role-block">
+        <div class="role-block-label">Skills Prioritárias</div>
+        <div class="role-skills">
+          <span class="skill-pill">Woodcutting</span>
+          <span class="skill-pill">Pickaxe</span>
+          <span class="skill-pill">Blocking</span>
+          <span class="skill-pill">Run</span>
+        </div>
+      </div>
+      <div class="role-block">
+        <div class="role-block-label">Missão</div>
+        <div class="role-block-content">Estabelece a longhouse inicial, o hub central de portais e as defesas contra raids. Evolui do wood framing para Stonecutter, depois Black Marble e Grausten no endgame. Mantém o Comfort buff alto em todas as bases.</div>
+      </div>
+      <div class="role-block">
+        <div class="role-block-label">Evolução por Bioma</div>
+        <div class="role-block-content">Meadows/BF: hub central. Swamp+: defesas de pedra. Plains+: fazenda cercada. Mistlands+: arquitetura vertical. Ashlands: base anti-incêndio.</div>
+      </div>
+    </div>
+
+    <div class="role-card" data-role="farmer">
+      <div class="role-icon">❦</div>
+      <h3>Granjeiro</h3>
+      <div class="role-subtitle">O cozinheiro que mantém todos vivos</div>
+      <div class="role-block">
+        <div class="role-block-label">Skills Prioritárias</div>
+        <div class="role-skills">
+          <span class="skill-pill">Blocking</span>
+          <span class="skill-pill">Run</span>
+          <span class="skill-pill">Swim</span>
+        </div>
+      </div>
+      <div class="role-block">
+        <div class="role-block-label">Missão</div>
+        <div class="role-block-content">Opera Cauldron, Fermenter, Stone Oven e Artisan Press. Cultiva cenouras, nabos, flax, barley, Jotun Puffs e Magecap. Prepara sempre os três foods corretos e todas as meads antes de cada expedição de chefe.</div>
+      </div>
+      <div class="role-block">
+        <div class="role-block-label">Evolução por Bioma</div>
+        <div class="role-block-content">Quase invisível nos primeiros biomas (só berries). Torna-se CENTRAL nas Plains quando flax e barley aparecem. Mistlands+: destrava Eitr food para magos do grupo.</div>
+      </div>
+    </div>
+
+    <div class="role-card" data-role="miner">
+      <div class="role-icon">⛏</div>
+      <h3>Minerador</h3>
+      <div class="role-subtitle">A fonte de todos os metais</div>
+      <div class="role-block">
+        <div class="role-block-label">Skills Prioritárias</div>
+        <div class="role-skills">
+          <span class="skill-pill">Pickaxe</span>
+          <span class="skill-pill">Blocking</span>
+          <span class="skill-pill">Clubs/Swords</span>
+        </div>
+      </div>
+      <div class="role-block">
+        <div class="role-block-label">Missão</div>
+        <div class="role-block-content">Corre todo o ciclo metálico: Copper/Tin → Iron → Silver → Blackmetal Scrap → Black Marble/Yggdrasil → Flametal. Mantém Forge e Smelter no tier máximo e distribui barras processadas pelo grupo.</div>
+      </div>
+      <div class="role-block">
+        <div class="role-block-label">Evolução por Bioma</div>
+        <div class="role-block-content">BF: bronze. Swamp: iron em Sunken Crypts. Mountains: silver (dependência do batedor). Plains: Blackmetal Scrap. Mistlands: novos processos de Eitr. Ashlands: Flametal submerso.</div>
+      </div>
+    </div>
+
+    <div class="role-card" data-role="scout">
+      <div class="role-icon">➳</div>
+      <h3>Batedor</h3>
+      <div class="role-subtitle">Os olhos e ouvidos da jornada</div>
+      <div class="role-block">
+        <div class="role-block-label">Skills Prioritárias</div>
+        <div class="role-skills">
+          <span class="skill-pill">Bows</span>
+          <span class="skill-pill">Sneak</span>
+          <span class="skill-pill">Swim</span>
+          <span class="skill-pill">Run</span>
+        </div>
+      </div>
+      <div class="role-block">
+        <div class="role-block-label">Missão</div>
+        <div class="role-block-content">Mapeia o mundo, localiza todos os biomas, encontra o trader Haldor, marca dungeons e veios de minério, identifica os spots do chefe de cada bioma. Vira o DPS ranged principal em boss fights.</div>
+      </div>
+      <div class="role-block">
+        <div class="role-block-label">Evolução por Bioma</div>
+        <div class="role-block-content">Meadows/BF: scout de terra. Swamp: identifica Crypts de Iron. Mountains+: navegação marítima com Longship/Drakkar. Mistlands: essencial para navegar a névoa.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rotation-note">
+    <h4>Regra da Rotação</h4>
+    <p>Os papéis não são prisões. <strong>Cada bioma redistribui protagonismo</strong>: o Granjeiro é quase invisível até as Plains, quando flax/barley o tornam central; o Minerador tem dias tranquilos entre ciclos metálicos; o Batedor brilha no início e nas Mistlands. Combinem em cada transição: "quem foca em quê neste tier?". E lembrem-se — todos devem ter pelo menos <strong>duas skills de arma + uma skill do papel</strong>, porque inimigos resistem a tipos de dano diferentes (skeletons odeiam blunt, Abominations odeiam fire, wolves resistem a pierce). Obrigar alguém a usar só espada o jogo inteiro é erro tático.</p>
+  </div>
+</section>
+
+<!-- MODULE 4: COOPERAÇÃO -->
+<section class="module" id="coop">
+  <div class="module-header">
+    <div class="module-number">Módulo IV</div>
+    <h2>Como <em>quatro</em> vira dez</h2>
+    <p class="module-intro">O jogo escala automaticamente a dificuldade, mas também multiplica drops. Com coordenação simples, quatro jogadores avançam tanto quanto dois grupos descoordenados. Aqui está como extrair todo o valor.</p>
+  </div>
+
+  <div class="coop-section">
+    <h3>Como o jogo escala com 4 jogadores</h3>
+    <p>A cada jogador adicional dentro de 100m do inimigo, o HP sobe <strong>+30%</strong> e o dano <strong>+4%</strong>, com cap em 5 jogadores. Um grupo de 4 enfrenta chefes ~90% mais tankudos — mas os <strong>drops do chefe multiplicam pelo número de jogadores online no mundo inteiro</strong>, não só os presentes na arena. Todos logados no momento da kill = mais recursos para todos.</p>
+
+    <div class="scaling-chart">
+      <div class="scaling-row">
+        <div class="scaling-label">HP vs 1P</div>
+        <div class="scaling-bar-track"><div class="scaling-bar-fill" data-width="25"></div></div>
+        <div class="scaling-value">Baseline</div>
+      </div>
+      <div class="scaling-row">
+        <div class="scaling-label">HP vs 2P</div>
+        <div class="scaling-bar-track"><div class="scaling-bar-fill" data-width="45"></div></div>
+        <div class="scaling-value">+30%</div>
+      </div>
+      <div class="scaling-row">
+        <div class="scaling-label">HP vs 3P</div>
+        <div class="scaling-bar-track"><div class="scaling-bar-fill" data-width="67"></div></div>
+        <div class="scaling-value">+60%</div>
+      </div>
+      <div class="scaling-row">
+        <div class="scaling-label">HP vs 4P</div>
+        <div class="scaling-bar-track"><div class="scaling-bar-fill" data-width="88"></div></div>
+        <div class="scaling-value">+90%</div>
+      </div>
+      <div class="scaling-row">
+        <div class="scaling-label">Drops 4P</div>
+        <div class="scaling-bar-track"><div class="scaling-bar-fill" data-width="100"></div></div>
+        <div class="scaling-value">×4</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="coop-section">
+    <h3>Rede de portais otimizada</h3>
+    <p>A diferença entre 5 e 20 horas perdidas em deslocamento. Construam uma <strong>sala de portais central</strong> no main base com 10–15 portais rotulados. Tags são case-sensitive e aceitam até 10 caracteres. Sempre carreguem <strong>20 Fine Wood + 2 Surtling Cores + 10 Greydwarf Eyes</strong> na bolsa para plantar portais quando acharem depósitos valiosos.</p>
+
+    <div class="portal-grid">
+      <div class="portal-tag"><span class="portal-tag-name">Home</span>spawn</div>
+      <div class="portal-tag"><span class="portal-tag-name">Trader</span>haldor</div>
+      <div class="portal-tag"><span class="portal-tag-name">Swamp</span>swamp1</div>
+      <div class="portal-tag"><span class="portal-tag-name">Swamp</span>swamp2</div>
+      <div class="portal-tag"><span class="portal-tag-name">Montanha</span>mount1</div>
+      <div class="portal-tag"><span class="portal-tag-name">Silver</span>silver</div>
+      <div class="portal-tag"><span class="portal-tag-name">Plains</span>plains1</div>
+      <div class="portal-tag"><span class="portal-tag-name">Plains</span>plains2</div>
+      <div class="portal-tag"><span class="portal-tag-name">Mistlands</span>mist1</div>
+      <div class="portal-tag"><span class="portal-tag-name">Ashlands</span>ash1</div>
+      <div class="portal-tag"><span class="portal-tag-name">Flex</span>(vazio)</div>
+      <div class="portal-tag"><span class="portal-tag-name">Flex</span>(vazio)</div>
+    </div>
+    <p style="margin-top: 1.5rem;">Portais comuns <strong>não teleportam minérios brutos</strong> (copper, tin, iron, silver, black metal, flametal) nem Dragon Eggs. Barras já processadas passam. O <strong>Portal Stone das Ashlands</strong> remove essa restrição — é o grande prêmio logístico do endgame.</p>
+  </div>
+
+  <div class="coop-section">
+    <h3>Mapa compartilhado e divisão de loot</h3>
+    <p>Use a <strong>Cartography Table</strong> (destravada após o chefe do Swamp) para sincronizar mapa e pins entre todos os jogadores — ferramenta oficial que grupos frequentemente ignoram. Para loot, o padrão justo é <strong>baús comunais por material</strong> em storage room (cada metal em chest separado), mais um baú pessoal por jogador para itens de combate e comida individuais.</p>
+    <p><strong>Sobre raids</strong>: só disparam perto de ≥3 estruturas de base em raio de 40m de um jogador — expedições exploratórias não sofrem raid até voltarem para casa. Aproveitem para farms longos sem se preocupar.</p>
+  </div>
+
+  <div class="coop-section">
+    <h3>World Modifiers na criação</h3>
+    <p>Desde o update Hildir's Request, vocês podem ajustar no menu de criação: <strong>Combat difficulty</strong> (Very Easy → Very Hard), <strong>Death Penalty</strong>, <strong>Resource drops</strong> (0.5× a 3×), <strong>Raid frequency</strong> e <strong>Portal rules</strong>. Para grupo iniciante: <strong>Normal em tudo</strong>. Se for punitivo demais, aumentem "Resources" para <em>More</em> e "Death Penalty" para <em>Easy</em> sem quebrar o balanceamento. Evitem "Portals: Casual" numa primeira run — a restrição de minérios é central para a sensação do jogo.</p>
+  </div>
+</section>
+
+<!-- MODULE 5: DICAS -->
+<section class="module" id="dicas">
+  <div class="module-header">
+    <div class="module-number">Módulo V</div>
+    <h2>Verdades <em>essenciais</em> para novatos</h2>
+    <p class="module-intro">Cinco hábitos e sistemas que grupos iniciantes quase sempre ignoram — e cujo domínio economiza dezenas de horas de frustração ao longo da campanha.</p>
+  </div>
+
+  <div class="tips-list">
+    <div class="tip-item">
+      <div class="tip-number"></div>
+      <div class="tip-content">
+        <h3>O mundo é uma seed — e pode ser regerado</h3>
+        <p>A mesma seed (texto/número na criação) gera sempre o mesmo mapa. Se o spawn inicial for ruim, gerem outro — vocês podem <strong>transportar o personagem entre mundos</strong> livremente. Quando o Deep North lançar, Iron Gate recomenda gerar mundo novo para o conteúdo carregar corretamente.</p>
+      </div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-number"></div>
+      <div class="tip-content">
+        <h3>Três slots de comida, nunca repetir</h3>
+        <p>Vocês podem ter <strong>três comidas ativas simultaneamente</strong>, mas nunca a mesma duas vezes. Cada uma dura 15–30 minutos; feasts até 50 min. As cores importam: <strong>vermelho = HP, amarelo = Stamina, azul = Eitr (magia)</strong>. Para combate, 2 vermelhas + 1 amarela. Para exploração, 3 amarelas. Sem comer, HP base cai para 25 e vocês ficam inúteis.</p>
+      </div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-number"></div>
+      <div class="tip-content">
+        <h3>Rested buff é sagrado</h3>
+        <p>Fogo + cama + teto + 70% de cobertura = <strong>+50% HP regen, +100% Stamina regen e +50% XP gain em todas as skills</strong>. Esse último bônus é quase secreto e brutal. Sempre durmam/descansem antes de expedições longas. Comfort máximo vanilla é 17 (Hanging Brazier, Dragon Bed, Raven Throne, rugs, banners, table, chair — cada categoria conta só uma vez).</p>
+      </div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-number"></div>
+      <div class="tip-content">
+        <h3>Skills sobem com uso — e caem com morte</h3>
+        <p>Não há skill tree. As <strong>15 skills individuais</strong> (armas, run, swim, sneak, etc.) sobem pelo uso. Morte remove 5% de cada nível, <strong>mas existe um buff silencioso de 10 minutos após morrer</strong> que impede perda dupla em mortes consecutivas. Se o local for fatal, não tentem recuperar a gravestone imediatamente — esperem o buff e voltem preparados.</p>
+      </div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-number"></div>
+      <div class="tip-content">
+        <h3>Preste atenção no Hugin e no ambiente</h3>
+        <p>O corvo <strong>Hugin</strong> dá tips contextuais gratuitas — leia o que ele diz. Construam a base <strong>perto de água</strong> (para navegação) e em <strong>fronteira entre biomas</strong> (acesso rápido variado). Fall damage começa a 4m (cap 100 de dano). Chuva aplica Wet debuff (−regen) — sempre se sequem perto do fogo antes de combate. E usem <code>Quick Stack</code> (tecla F por padrão) para jogar itens em baús próximos em 2 segundos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p class="footer-quote">"Os chefes não exigem reflexos — exigem preparação. O grupo que farma 40 minutos antes vence na primeira tentativa."</p>
+  <div class="footer-runes">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ</div>
+</footer>
+
+<!-- ============ POPOVER DE RECURSOS ============ -->
+<div id="popover" role="dialog" aria-hidden="true">
+  <div class="pop-head">
+    <div class="pop-eyebrow" id="popEyebrow">Recurso</div>
+    <div class="pop-title" id="popTitle">—</div>
+    <button class="pop-close" id="popClose" aria-label="Fechar">×</button>
+  </div>
+  <div class="pop-body">
+    <div class="pop-section">
+      <div class="pop-label">Onde encontrar</div>
+      <div class="pop-text" id="popWhere">—</div>
+      <div id="popBiomes"></div>
+    </div>
+    <div class="pop-section">
+      <div class="pop-label">Como obter</div>
+      <div class="pop-text" id="popHow">—</div>
+    </div>
+    <div class="pop-tip" id="popTip">
+      <strong>Dica</strong>
+      <span id="popTipText">—</span>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Navegação entre módulos
+const navButtons = document.querySelectorAll('.nav-btn');
+const modules = document.querySelectorAll('.module');
+
+navButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.module;
+
+    navButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    modules.forEach(m => m.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+
+    // Scroll suave ao topo do módulo
+    window.scrollTo({ top: document.querySelector('nav.modules').offsetTop - 10, behavior: 'smooth' });
+
+    // Trigger animação das barras se estiver no módulo coop
+    if (target === 'coop') {
+      setTimeout(animateScalingBars, 100);
+    }
+  });
+});
+
+// Navegação entre biomas dentro do módulo
+const progressSteps = document.querySelectorAll('.progress-step');
+const biomeCards = document.querySelectorAll('.biome-card');
+
+progressSteps.forEach(step => {
+  step.addEventListener('click', () => {
+    const target = step.dataset.biome;
+
+    progressSteps.forEach(s => s.classList.remove('active'));
+    step.classList.add('active');
+
+    biomeCards.forEach(c => c.classList.remove('active'));
+    document.querySelector(`.biome-card[data-biome="${target}"]`).classList.add('active');
+  });
+});
+
+// Animação das barras de scaling
+function animateScalingBars() {
+  const bars = document.querySelectorAll('.scaling-bar-fill');
+  bars.forEach((bar, i) => {
+    const targetWidth = bar.dataset.width;
+    setTimeout(() => {
+      bar.style.width = targetWidth + '%';
+    }, i * 150);
+  });
+}
+
+// Keyboard navigation (setas esquerda/direita nos biomas)
+document.addEventListener('keydown', (e) => {
+  const activeModule = document.querySelector('.module.active');
+  if (activeModule.id !== 'biomas') return;
+
+  const activeStep = document.querySelector('.progress-step.active');
+  const steps = Array.from(progressSteps);
+  const currentIndex = steps.indexOf(activeStep);
+
+  if (e.key === 'ArrowRight' && currentIndex < steps.length - 1) {
+    steps[currentIndex + 1].click();
+  } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+    steps[currentIndex - 1].click();
+  }
+});
+
+// ============ BANCO DE DADOS DE RECURSOS ============
+const resourceData = {
+  // MEADOWS
+  'wood': {
+    title: 'Madeira (Wood)',
+    biomes: ['Meadows', 'Black Forest'],
+    where: 'Árvores espalhadas em praticamente todo bioma, mas Meadows tem beech trees pequenas e fáceis de derrubar logo no início.',
+    how: 'Derrubada com <strong>Stone Axe</strong> ou superior. Também solta de tocos e graveto no chão. Sobe a skill Woodcutting.',
+    tip: 'Derrube árvores em terreno plano — troncos que rolam morro abaixo somem no oceano.'
+  },
+  'stone': {
+    title: 'Pedra (Stone)',
+    biomes: ['Todos os biomas'],
+    where: 'Pedregulhos pequenos espalhados pelo chão em qualquer bioma. Black Forest e Mountains têm abundância em rochedos maiores.',
+    how: 'Coletada à mão (pedras pequenas) ou minerada com picareta. Também cai de rochas que Trolls quebram.',
+    tip: 'Deixe Trolls quebrarem rochas perto de você — vira stone farm gratuito enquanto foge.'
+  },
+  'leather-scraps': {
+    title: 'Leather Scraps',
+    biomes: ['Meadows'],
+    where: 'Drop de <strong>Boars (javalis)</strong>, abundantes em Meadows.',
+    how: 'Mate javalis com Club, Spear ou Flint Spear. Também saem ocasionalmente de Greylings.',
+    tip: 'Boars podem ser domesticados e reproduzidos em cativeiro — fonte infinita de Leather Scraps, Raw Meat e troféus.'
+  },
+  'feathers': {
+    title: 'Feathers',
+    biomes: ['Meadows', 'Black Forest'],
+    where: 'Drop de <strong>Seagulls</strong> (na praia) e <strong>Crows</strong> (no Black Forest, perto de Greydwarf nests).',
+    how: 'Abatidos com arco — Crude Bow + Wood Arrow já resolve. Necessário para fazer flechas.',
+    tip: 'Atire em gaivotas voando sobre rochas — o drop às vezes cai na água, então mire com o vento ajudando.'
+  },
+  'raspberries': {
+    title: 'Raspberries',
+    biomes: ['Meadows'],
+    where: 'Arbustos vermelhos espalhados por Meadows, facilmente identificáveis.',
+    how: 'Coletadas à mão — clique no arbusto. Respawnam a cada ~300 segundos.',
+    tip: 'Podem ser plantadas em Cultivator após obter sementes. Indispensáveis para Queen\'s Jam e vários meads.'
+  },
+  'honey': {
+    title: 'Mel (Honey)',
+    biomes: ['Meadows', 'Black Forest'],
+    where: 'Colmeias selvagens em ruínas abandonadas (casas quebradas em Meadows). Depois, crie Beehives em casa.',
+    how: 'Quebre a colmeia com machado — solta Honey + Queen Bee. Queen Bee permite construir suas próprias Beehives.',
+    tip: 'Coloque Beehives sob teto aberto (precisa de luz do sol) — cada uma produz ~1 honey a cada 30 min de jogo.'
+  },
+
+  // BLACK FOREST
+  'copper': {
+    title: 'Copper Ore',
+    biomes: ['Black Forest'],
+    where: 'Grandes rochedos verde-acobreados (Copper Deposits) espalhados pela Black Forest. Destacam muito na paisagem.',
+    how: 'Requer <strong>Antler Pickaxe</strong> (crafted após o chefe de Meadows). Um depósito rende ~30–80 ore.',
+    tip: 'Cave o depósito TODO — o minério continua descendo terra adentro. Muita gente desiste na superfície e perde metade.'
+  },
+  'tin': {
+    title: 'Tin Ore',
+    biomes: ['Black Forest'],
+    where: 'Depósitos prateados brilhantes nas <strong>margens de rios e costas</strong> da Black Forest — beira d\'água.',
+    how: 'Também requer Antler Pickaxe. Depósitos são pequenos (4–6 ore cada) mas abundantes nas praias.',
+    tip: 'Percorra a costa de barco (Raft ou Karve) — você encontra dezenas de depósitos rapidamente sem luta.'
+  },
+  'bronze': {
+    title: 'Bronze (barra)',
+    biomes: ['Crafted'],
+    where: 'Não existe na natureza — é liga feita pelos jogadores.',
+    how: 'No <strong>Forge</strong>: combine <strong>2 Copper + 1 Tin</strong> → 1 Bronze. Funde as ores brutas no Smelter primeiro.',
+    tip: 'Bronze tem mesma função de Iron para crafting inicial. Não desperdice fazendo decoração — cada barra é preciosa no early game.'
+  },
+  'troll-hide': {
+    title: 'Troll Hide',
+    biomes: ['Black Forest'],
+    where: 'Drop de <strong>Trolls</strong> — aqueles gigantes azuis que aparecem na Black Forest, às vezes vagando para Meadows.',
+    how: 'Mate Trolls com Bronze weapons + arco. Matar 1 já rende 3–4 hides. Kite em árvores para evitar dano.',
+    tip: 'Troll Armor (crafted com hide) dá bônus de +5 Sneak e é leve — excelente para arqueiros até a Swamp.'
+  },
+  'ancient-bark': {
+    title: 'Ancient Bark',
+    biomes: ['Black Forest', 'Swamp'],
+    where: 'Drop de <strong>Ancient Trees</strong>, aquelas árvores mortas enormes (galhos retorcidos) na Black Forest. Na Swamp caem também.',
+    how: 'Requer <strong>Bronze Axe</strong> ou melhor. Cada árvore rende 15–25 Ancient Bark.',
+    tip: 'Material essencial para Longship, Stagbreaker e vários móveis. Estoque 100+ antes de entrar a fundo na Swamp.'
+  },
+  'thistle': {
+    title: 'Thistle',
+    biomes: ['Black Forest', 'Swamp'],
+    where: 'Planta bioluminescente azul-roxa que só aparece à <strong>noite</strong> em Black Forest e Swamp.',
+    how: 'Coletada à mão. Brilha no escuro, facilita achar. Essencial para Poison Resistance Mead e vários pratos.',
+    tip: 'Saia à noite com Troll Armor (bônus sneak) e colha em rota — prioridade absoluta antes de entrar na Swamp.'
+  },
+  'surtling-cores': {
+    title: 'Surtling Cores',
+    biomes: ['Black Forest'],
+    where: 'Dentro de <strong>Burial Chambers</strong> (dungeons), em braseiros de pedra. Também drop raro de Surtlings nos Swamp Fire Geysers.',
+    how: 'Explore Burial Chambers com Club + Shield — inimigos são Skeletons fracos. Cada chamber rende 2–6 cores.',
+    tip: '<strong>Cada Smelter, Charcoal Kiln e Portal custa 2 cores</strong>. Colete 20+ antes de sair da Black Forest.'
+  },
+
+  // SWAMP
+  'scrap-iron': {
+    title: 'Scrap Iron',
+    biomes: ['Swamp'],
+    where: 'Dentro de <strong>Sunken Crypts</strong> — dungeons da Swamp que exigem <strong>Swamp Key</strong> (drop do chefe anterior).',
+    how: 'Minerado com <strong>Bronze Pickaxe</strong> dos Muddy Scrap Piles dentro das Crypts. Depois fundido no Smelter para virar Iron.',
+    tip: 'Iron NÃO atravessa portais. Construa outpost com Smelter + Forge perto da Swamp e só processe para barras antes de voltar.'
+  },
+  'guck': {
+    title: 'Guck',
+    biomes: ['Swamp'],
+    where: '<strong>Bolhas verdes</strong> grudadas no alto de árvores mortas da Swamp.',
+    how: 'Derrube a árvore com Ancient Bark drops — o Guck cai junto. Também drop de Gucks (criaturas).',
+    tip: 'Usado em Yule Hat, Bonemass trophy decoration e Blood Pudding. Colete 30+ em qualquer visita à Swamp.'
+  },
+  'chain': {
+    title: 'Chain',
+    biomes: ['Swamp'],
+    where: 'Drop raro de <strong>Wraiths</strong> — fantasmas voadores que aparecem à noite na Swamp.',
+    how: 'Mate Wraiths com armas de ferro ou Silver. Dão 1 Chain por kill (drop ~70%).',
+    tip: 'Chain é requisito para o Huntsman Bow e Iron Armor peças. 3 chains já resolvem; farm à noite propositalmente.'
+  },
+  'turnip': {
+    title: 'Turnip (nabo)',
+    biomes: ['Swamp'],
+    where: 'Plantas amarelas espalhadas pelo chão da Swamp — fáceis de identificar, parecem tufos.',
+    how: 'Colete à mão para pegar seeds, depois plante em casa com <strong>Cultivator</strong>.',
+    tip: 'Turnip Stew é um dos melhores foods de HP do tier iron — e turnips crescem rápido. Monte canteiro grande.'
+  },
+
+  // MOUNTAINS
+  'silver': {
+    title: 'Silver Ore',
+    biomes: ['Mountains'],
+    where: 'Depósitos enterrados <strong>debaixo da neve</strong> nas Mountains. Invisíveis a olho nu.',
+    how: 'Requer <strong>Wishbone</strong> (item do chefe da Swamp) equipado — ele faz som/partículas quando você passa perto. Minere com Iron Pickaxe.',
+    tip: 'Sem Wishbone, achar silver é puro azar. Derrote o chefe do Swamp ANTES de tentar farm sério nas Mountains.'
+  },
+  'wolf-pelt': {
+    title: 'Wolf Pelt',
+    biomes: ['Mountains'],
+    where: 'Drop de <strong>Wolves</strong> e <strong>Fenring</strong> nas Mountains.',
+    how: 'Mate lobos com Iron Mace/Sword + shield para parry. Vêm em grupos à noite — cuidado.',
+    tip: 'Wolf Cape dá <strong>Frost Resistance permanente</strong> — transforme os primeiros 4 pelts em capa antes de tentar upgrade de armor.'
+  },
+  'obsidian': {
+    title: 'Obsidian',
+    biomes: ['Mountains'],
+    where: 'Grandes rochas <strong>pretas brilhantes</strong> espalhadas pelas Mountains. Visível, não precisa de wishbone.',
+    how: 'Minerada com <strong>Iron Pickaxe</strong>. Abundante, cada rocha rende 10–15.',
+    tip: 'Obsidian Arrows são ótimas para Mountains e Plains (dano pierce puro). Estoque 100+ obsidian para arrows.'
+  },
+  'freeze-glands': {
+    title: 'Freeze Glands',
+    biomes: ['Mountains'],
+    where: 'Drop de <strong>Drakes</strong> — dragões voadores pequenos que circulam picos altos das Mountains.',
+    how: 'Abata com arco enquanto voam. Huntsman Bow + Frost Arrows funciona muito bem.',
+    tip: 'Essenciais para Frost Resistance Mead e Frost Arrows. Com 10+, vocês ficam bem servidos até as Plains.'
+  },
+  'crystal': {
+    title: 'Crystal',
+    biomes: ['Mountains'],
+    where: 'Drop de <strong>Stone Golems</strong> — estátuas de pedra gigantes que "acordam" quando você se aproxima.',
+    how: 'Use <strong>Iron Pickaxe</strong> como arma (bônus contra Golems) ou Iron Mace. Quebre os pedaços brilhantes.',
+    tip: 'Crystal Battleaxe e Serpent Scale Shield são poderosíssimos. Mate 3–4 Golems e você tem material suficiente.'
+  },
+  'dragon-egg': {
+    title: 'Dragon Egg',
+    biomes: ['Mountains'],
+    where: 'Em <strong>ninhos de pedra</strong> no topo de picos altos das Mountains. Procure por estruturas circulares.',
+    how: 'Pega-se à mão, mas <strong>pesa 200</strong> — praticamente te impede de correr. Só se move em pairs.',
+    tip: 'Ovos NÃO atravessam portais. Planeje a rota de volta com Longship ou carregue um extra por segurança de grupo.'
+  },
+
+  // PLAINS
+  'blackmetal-scrap': {
+    title: 'Blackmetal Scrap',
+    biomes: ['Plains'],
+    where: 'Drop de <strong>Fulings</strong> — goblins verdes das Plains. Aglomerados em <strong>Fuling Villages</strong> (tendas).',
+    how: 'Mate Fulings regulares (1 scrap), Berserkers (2–3), Shamans. Depois funda no Smelter para barras de Black Metal.',
+    tip: 'Use Frostner (stagger de frost) + escudo com parry. Fulings atacam em grupo, não encare de frente sem prep.'
+  },
+  'flax': {
+    title: 'Flax',
+    biomes: ['Plains'],
+    where: 'Plantas <strong>azul-claro</strong> pequenas dentro das <strong>Fuling Villages</strong>. Só crescem em Plains.',
+    how: 'Colete à mão para seeds. Processo: Flax → Linen Thread (Spinning Wheel) → Linen Thread vai em armadura Padded.',
+    tip: 'Seedbed dá rendimento 3×. Plantem em fazenda grande assim que saírem das Plains — demora ~3 dias in-game para maturar.'
+  },
+  'barley': {
+    title: 'Barley (cevada)',
+    biomes: ['Plains'],
+    where: 'Plantas <strong>amarelo-douradas</strong> dentro das Fuling Villages. Exclusivo das Plains.',
+    how: 'Processada em <strong>Windmill</strong> (desbloqueada após chefe das Plains) para Barley Flour. Essencial para Fire Resistance Wine.',
+    tip: 'NÃO funciona plantada fora das Plains — só germina no clima de Plains. Monte fazenda em Plains outpost.'
+  },
+  'lox-meat': {
+    title: 'Lox Meat',
+    biomes: ['Plains'],
+    where: 'Drop de <strong>Lox</strong> — os mamutes peludos das Plains.',
+    how: 'Lox têm muito HP e dão bastante dano melee. Use Frostner + kite com arco (Draugr Fang) para derrubar com segurança.',
+    tip: 'Lox Meat Pie é um dos foods de HP mais altos do jogo. Lox também podem ser domesticados com Cloudberries!'
+  },
+  'tar': {
+    title: 'Tar',
+    biomes: ['Plains'],
+    where: 'Dentro de <strong>Tar Pits</strong> — poços pretos nas Plains com <strong>Growths</strong> (criaturas de piche) guardando.',
+    how: 'Extraia tar dos poços à mão após limpar os Growths. Requer armas iron+ para matar os guardiões.',
+    tip: 'Tar é requisito da Artisan Table, Blast Furnace e armadura Padded. Limpe 1–2 Tar Pits para estoque duradouro.'
+  },
+  'linen-thread': {
+    title: 'Linen Thread',
+    biomes: ['Crafted'],
+    where: 'Não é drop — é processado em casa.',
+    how: 'Coloque <strong>Flax</strong> no <strong>Spinning Wheel</strong> (requer chefe das Plains). 1 Flax = 1 Linen Thread.',
+    tip: 'Leva tempo para processar. Construam 2–3 Spinning Wheels em paralelo se precisarem de muita armor Padded de uma vez.'
+  },
+  'dragon-tears': {
+    title: 'Dragon Tears',
+    biomes: ['Drop de chefe'],
+    where: 'Drop do chefe das Mountains (sem spoilers — vocês vão descobrir qual).',
+    how: 'Após matar o boss. Cada kill dá <strong>10 tears</strong> — compartilhados com quem estiver online no mundo.',
+    tip: 'Essenciais para Artisan Table (desbloqueia tier Plains). Garantam que todos estejam online na hora da kill.'
+  },
+
+  // MISTLANDS
+  'refined-eitr': {
+    title: 'Refined Eitr',
+    biomes: ['Crafted'],
+    where: 'Não é drop — requer processamento com materiais das Mistlands.',
+    how: 'Combine <strong>Sap</strong> (de Yggdrasil trees) + <strong>Soft Tissue</strong> (Gjall drops / estruturas Mistlands) no <strong>Eitr Refinery</strong>.',
+    tip: 'Eitr é a "mana" do jogo — destrava staves mágicos. Se alguém do grupo quiser ser mago, comece a produção cedo.'
+  },
+  'carapace': {
+    title: 'Carapace',
+    biomes: ['Mistlands'],
+    where: 'Drop de <strong>Seekers</strong> e <strong>Seeker Soldiers</strong> (insetos gigantes das Mistlands).',
+    how: 'Mate Seekers com armas Blackmetal+ e escudo para parry. Soldiers têm parry window bem pequena, cuidado.',
+    tip: 'Carapace Armor é o <strong>melhor armor set do jogo em defesa bruta</strong> (78 armor max). Priorize mesmo se for build mágica.'
+  },
+  'mandible': {
+    title: 'Mandible',
+    biomes: ['Mistlands'],
+    where: 'Drop de <strong>Seeker Soldiers</strong> — os Seekers maiores e mais perigosos.',
+    how: 'Farm direcionado: Soldiers ficam perto de ninhos/ovos grandes. Use Needle Arrows com Arbalest.',
+    tip: 'Requisito para Carapace Armor completa. Soldiers são o gargalo — 1 mandible por kill, precisa de 5–10 mínimo.'
+  },
+  'scale-hide': {
+    title: 'Scale Hide',
+    biomes: ['Mistlands'],
+    where: 'Drop de <strong>Hares</strong> brancos (Misthare) das Mistlands.',
+    how: 'Hares fogem rápido. Use arco + Sneak para abatê-los antes que escapem.',
+    tip: 'Hares também dão Misthare Supreme (food de HP). Farm duplo — não desperdice as caças.'
+  },
+  'yggdrasil-wood': {
+    title: 'Yggdrasil Wood',
+    biomes: ['Mistlands'],
+    where: 'Árvores <strong>gigantes azul-esverdeadas</strong> nas Mistlands — são raízes da Yggdrasil, difíceis de errar.',
+    how: 'Requer <strong>Blackmetal Axe</strong> — qualquer machado inferior NÃO corta. Cada árvore rende 15–25 wood.',
+    tip: 'Também dão Sap (goteja nas raízes) — colete perto das árvores derrubadas para o Eitr Refinery.'
+  },
+  'black-marble': {
+    title: 'Black Marble',
+    biomes: ['Mistlands'],
+    where: 'Em <strong>Dvergr outposts</strong> (aldeias dos anões) e ruínas espalhadas pelas Mistlands.',
+    how: 'Minerada com Iron Pickaxe+. Estruturas Dvergr têm blocos já processados (minerar peças de construção).',
+    tip: 'Dvergr Lantern pode ser comprada dos anões pacíficos — essencial para enxergar na névoa permanente.'
+  },
+  'wisp': {
+    title: 'Wisp',
+    biomes: ['Mistlands'],
+    where: 'Pequenas luzes azuis flutuando pelas Mistlands à noite.',
+    how: 'Capture com a <strong>Wisplight</strong> (crafted após matar o chefe do Swamp + materiais Mistlands) usando tecla de interação.',
+    tip: 'Wisps são usados para <strong>Wisp Torch</strong> (afastam a névoa numa área permanente). Espalhem pelo outpost Mistlands.'
+  },
+  'bilebag': {
+    title: 'Bilebag',
+    biomes: ['Mistlands'],
+    where: 'Drop de <strong>Gjalls</strong> — criaturas voadoras gigantes amarelas que jogam bombas explosivas.',
+    how: 'Abata com Arbalest + Needle Arrows <strong>de longe</strong>. Cuidado: ao morrer podem explodir perto de você.',
+    tip: 'Bilebag Bombs são explosivos portáteis poderosíssimos — farm 2–3 Gjalls e você tem bombas para boss fights.'
+  },
+
+  // ASHLANDS
+  'flametal': {
+    title: 'Flametal Ore',
+    biomes: ['Ashlands'],
+    where: 'Em <strong>Molten Pillars</strong> (pilares de pedra) nas Ashlands — começam a <strong>afundar em lava</strong> quando você começa a minerar.',
+    how: 'Requer <strong>Blackmetal Pickaxe</strong>. Você tem tempo limitado antes do pilar submergir — minere rápido.',
+    tip: 'Traga 2–3 mineradores simultâneos por pilar. Um pilar rende 40–80 Flametal se ninguém vacilar.'
+  },
+  'charred-bones': {
+    title: 'Charred Bones',
+    biomes: ['Ashlands'],
+    where: 'Drop abundante de <strong>Charred</strong> (undead das Ashlands) — você vai acumular muito só sobrevivendo.',
+    how: 'Qualquer kill de Charred dá 1–2 bones. Raids de base nas Ashlands rendem dezenas sem sair de casa.',
+    tip: 'Requisito para vários itens de endgame. Não vende o excesso — você vai precisar mais do que imagina.'
+  },
+  'grausten': {
+    title: 'Grausten',
+    biomes: ['Ashlands'],
+    where: 'Pedra cinza escura característica das Ashlands — minerada em formações rochosas locais.',
+    how: 'Requer <strong>Iron Pickaxe</strong> ou superior. Abundante, não se preocupem com escassez.',
+    tip: 'Bases nas Ashlands PRECISAM ser construídas com Grausten ou Ashwood — madeira comum pega fogo com os cinders do céu.'
+  },
+  'asksvin-hide': {
+    title: 'Asksvin Hide',
+    biomes: ['Ashlands'],
+    where: 'Drop de <strong>Asksvin</strong> — lagartos bípedes das Ashlands. Também podem ser domesticados como mount!',
+    how: 'Mate com armas Mistlands-tier. Asksvins são ágeis e atacam em salto — use parry.',
+    tip: '<strong>Asksvin é o primeiro mount do jogo</strong>. Domestique um para atravessar as Ashlands muito mais rápido.'
+  },
+  'proustite': {
+    title: 'Proustite Powder',
+    biomes: ['Ashlands'],
+    where: 'Drop de inimigos Charred específicos e extraído de certas formações.',
+    how: 'Recurso avançado do tier Flametal. Usado em receitas de endgame.',
+    tip: 'Foquem em recursos básicos primeiro (Flametal, Grausten). Proustite vem naturalmente conforme vocês exploram.'
+  }
+};
+
+// ============ POPOVER LOGIC ============
+const popover = document.getElementById('popover');
+const popTitle = document.getElementById('popTitle');
+const popEyebrow = document.getElementById('popEyebrow');
+const popWhere = document.getElementById('popWhere');
+const popHow = document.getElementById('popHow');
+const popTipText = document.getElementById('popTipText');
+const popBiomes = document.getElementById('popBiomes');
+const popClose = document.getElementById('popClose');
+
+let currentResource = null;
+
+function showPopover(el, resourceKey) {
+  const data = resourceData[resourceKey];
+  if (!data) return;
+
+  // Preenche conteúdo
+  popTitle.textContent = data.title;
+  popEyebrow.textContent = 'Recurso';
+  popWhere.innerHTML = data.where;
+  popHow.innerHTML = data.how;
+  popTipText.innerHTML = data.tip;
+
+  // Tags de bioma
+  popBiomes.innerHTML = data.biomes.map(b =>
+    `<span class="pop-biome-tag">${b}</span>`
+  ).join('');
+
+  // Posicionamento inteligente
+  const rect = el.getBoundingClientRect();
+  const popWidth = 340;
+  const popHeight = popover.offsetHeight || 400;
+  const margin = 12;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  let left = rect.left + (rect.width / 2) - (popWidth / 2);
+  let top = rect.bottom + 8;
+
+  // Ajustes horizontais
+  if (left < margin) left = margin;
+  if (left + popWidth > vw - margin) left = vw - popWidth - margin;
+
+  // Se não couber abaixo, mostrar acima
+  if (top + popHeight > vh - margin) {
+    top = rect.top - popHeight - 8;
+    if (top < margin) top = margin; // Se não couber acima também, cola no topo
+  }
+
+  popover.style.left = left + 'px';
+  popover.style.top = top + 'px';
+  popover.classList.add('visible');
+  popover.setAttribute('aria-hidden', 'false');
+
+  // Marca elemento como ativo
+  document.querySelectorAll('.resource.active').forEach(r => r.classList.remove('active'));
+  el.classList.add('active');
+  currentResource = el;
+}
+
+function hidePopover() {
+  popover.classList.remove('visible');
+  popover.setAttribute('aria-hidden', 'true');
+  if (currentResource) {
+    currentResource.classList.remove('active');
+    currentResource = null;
+  }
+}
+
+// Delegação: clique em qualquer .resource
+document.addEventListener('click', (e) => {
+  const resource = e.target.closest('.resource');
+  if (resource) {
+    e.stopPropagation();
+    const key = resource.dataset.resource;
+    if (currentResource === resource) {
+      hidePopover();
+    } else {
+      showPopover(resource, key);
+    }
+    return;
+  }
+
+  // Clicou fora do popover e fora de um .resource
+  if (!e.target.closest('#popover')) {
+    hidePopover();
+  }
+});
+
+popClose.addEventListener('click', (e) => {
+  e.stopPropagation();
+  hidePopover();
+});
+
+// ESC fecha popover
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') hidePopover();
+});
+
+// Fecha popover ao trocar de bioma ou módulo
+progressSteps.forEach(s => s.addEventListener('click', hidePopover));
+navButtons.forEach(b => b.addEventListener('click', hidePopover));
+
+// Reposiciona popover ao rolar (se estiver aberto)
+window.addEventListener('scroll', () => {
+  if (popover.classList.contains('visible') && currentResource) {
+    showPopover(currentResource, currentResource.dataset.resource);
+  }
+}, { passive: true });
+</script>
+
+</body>
+</html>
